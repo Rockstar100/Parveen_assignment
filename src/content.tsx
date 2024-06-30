@@ -17,12 +17,16 @@ export const getStyle = () => {
 };
 
 const PlasmoOverlay = () => {
-  const [messageBox, setMessageBox] = useState<HTMLElement | null>(null);
+  const [messageBoxes, setMessageBoxes] = useState<HTMLElement[]>([]);
   const [showModal, setShowModal] = useState(false);
-  const containerRef = useRef<HTMLDivElement | null>(null);
+  const containersRef = useRef<Map<HTMLElement, HTMLDivElement>>(new Map());
 
   const handleModal = () => {
     setShowModal(true);
+  };
+
+  const handleInsert = () => {
+    setShowModal(false);
   };
 
   const handleClose = () => {
@@ -30,8 +34,8 @@ const PlasmoOverlay = () => {
   };
 
   const checkForClass = () => {
-    const msgBox = document.querySelector('.msg-form__contenteditable[contenteditable="true"]') as HTMLElement;
-    setMessageBox(msgBox);
+    const msgBoxes = Array.from(document.querySelectorAll('.msg-form__contenteditable[contenteditable="true"]')) as HTMLElement[];
+    setMessageBoxes(msgBoxes);
   };
 
   useEffect(() => {
@@ -48,49 +52,47 @@ const PlasmoOverlay = () => {
   }, []);
 
   useEffect(() => {
-    if (messageBox) {
-      let container = containerRef.current;
-
-      if (!container) {
-        container = document.createElement('div');
+    messageBoxes.forEach(messageBox => {
+      if (!containersRef.current.has(messageBox)) {
+        const container = document.createElement('div');
         container.style.position = 'absolute';
         container.style.bottom = '8px';
         container.style.right = '8px';
         container.style.zIndex = '50';
         container.style.display = 'flex';
         messageBox.style.position = 'relative';
-        containerRef.current = container;
+        containersRef.current.set(messageBox, container);
         messageBox.appendChild(container);
+
+        const renderAIButton = () => {
+          ReactDOM.render(<AiButton onClick={handleModal} isModalOpen={showModal} />, container);
+        };
+
+        renderAIButton();
+
+        const mutationObserver = new MutationObserver(() => {
+          if (!messageBox.contains(container)) {
+            messageBox.appendChild(container);
+            renderAIButton();
+          }
+        });
+
+        mutationObserver.observe(messageBox, { childList: true, subtree: true });
+
+        return () => {
+          if (container && container.parentNode === messageBox) {
+            messageBox.removeChild(container);
+          }
+          mutationObserver.disconnect();
+        };
       }
-
-      const renderAIButton = () => {
-        ReactDOM.render(<AiButton onClick={handleModal} isModalOpen={showModal} />, container);
-      };
-
-      renderAIButton();
-
-      const mutationObserver = new MutationObserver(() => {
-        if (!messageBox.contains(container)) {
-          messageBox.appendChild(container);
-          renderAIButton();
-        }
-      });
-
-      mutationObserver.observe(messageBox, { childList: true, subtree: true });
-
-      return () => {
-        if (container && container.parentNode === messageBox) {
-          messageBox.removeChild(container);
-        }
-        mutationObserver.disconnect();
-      };
-    }
-  }, [messageBox, showModal]);
+    });
+  }, [messageBoxes, showModal]);
 
   return (
     <div className="z-50 flex fixed top-32 right-8">
-      <CountButton />
-      {showModal && <Modal onClose={handleClose} />}
+      {/* <CountButton /> */}
+      {showModal && <Modal onClose={handleClose} onInsert={handleInsert} />}
     </div>
   );
 };

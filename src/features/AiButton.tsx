@@ -1,6 +1,4 @@
-import React from 'react';
-import Ai from '../../assets/ai-icon.png';
-import Stars from '../../assets/stars.png';
+import React, { useState, useEffect } from 'react';
 
 interface AiButtonProps {
   onClick: () => void;
@@ -8,20 +6,14 @@ interface AiButtonProps {
 }
 
 export const AiButton: React.FC<AiButtonProps> = ({ onClick, isModalOpen }) => {
-  console.log('isModalOpen:', isModalOpen);
 
   return (
     <button
       type="button"
-      className="flex flex-row items-center px-4 py-2 text-sm transition-all border-none"
+      className="flex items-center px-4 py-2 text-sm transition-all border-none"
       onClick={onClick}
     >
-      <img 
-        src={isModalOpen ? Stars : Ai} 
-        width={isModalOpen ? 20 : 15} 
-        height={isModalOpen ? 20 : 15} 
-        alt={isModalOpen ? "Stars Icon" : "AI Icon"} 
-      />
+      <img src="https://res.cloudinary.com/dghpjm2df/image/upload/v1719731592/lehnoyjlikcch0guoyly.png" width={15} height={15} alt="Icon" />
     </button>
   );
 };

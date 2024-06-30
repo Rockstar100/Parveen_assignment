@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import Send from '../../assets/send.png';
-import Regenerate from '../../assets/regenrate.png';
-import Insert from '../../assets/insert.png';
+
 
 interface ModalProps {
   onClose: () => void;
+  onInsert: () => void;
 }
 
 interface ChatMessage {
@@ -13,10 +12,9 @@ interface ChatMessage {
   from: 'user' | 'system';
 }
 
-export const Modal: React.FC<ModalProps> = ({ onClose }) => {
+export const Modal: React.FC<ModalProps> = ({ onClose, onInsert }) => {
   const [prompt, setPrompt] = useState('');
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
-
   const handleGenerate = () => {
     if (prompt.trim()) {
       const userMessage: ChatMessage = {
@@ -51,12 +49,12 @@ export const Modal: React.FC<ModalProps> = ({ onClose }) => {
         // Trigger input and keydown events
         const inputEvent = new Event('input', { bubbles: true });
         const keydownEvent = new KeyboardEvent('keydown', { bubbles: true, key: ' ' });
-        
+
         messageBox.dispatchEvent(inputEvent);
         messageBox.dispatchEvent(keydownEvent);
 
         console.log('System message inserted:', lastMessage.text);
-        onClose();
+        onInsert();
       } else {
         console.error('LinkedIn message box not found');
       }
@@ -103,7 +101,7 @@ export const Modal: React.FC<ModalProps> = ({ onClose }) => {
               onClick={handleGenerate}
               className="flex items-center px-4 py-2 bg-blue-500 text-white rounded"
             >
-              <img src={Send} width={10} height={10} alt="Send" className="mr-2" />
+              <img src="https://res.cloudinary.com/dghpjm2df/image/upload/v1719731592/tfnaqsisnwm84vg4njfw.png" width={10} height={10} alt="Send" className="mr-2" />
               Generate
             </button>
           ) : (
@@ -112,7 +110,7 @@ export const Modal: React.FC<ModalProps> = ({ onClose }) => {
                 onClick={handleInsert}
                 className="flex items-center px-4 py-2 border border-black text-black rounded"
               >
-                <img src={Insert} width={12} height={12} alt="Insert" className="mr-2" />
+                <img src="https://res.cloudinary.com/dghpjm2df/image/upload/v1719731592/rimjvax5hmblovhy4vgx.png" width={12} height={12} alt="Insert" className="mr-2" />
                 Insert
               </button>
               <button
@@ -120,7 +118,7 @@ export const Modal: React.FC<ModalProps> = ({ onClose }) => {
                 className="flex items-center px-4 py-2 bg-blue-500 text-white rounded"
                 disabled
               >
-                <img src={Regenerate} width={10} height={10} alt="Regenerate" className="mr-2" />
+                <img src='https://res.cloudinary.com/dghpjm2df/image/upload/v1719731592/xdajndtqpsaoqzs9uzeb.png' width={10} height={10} alt="Regenerate" className="mr-2" />
                 Regenerate
               </button>
             </div>
