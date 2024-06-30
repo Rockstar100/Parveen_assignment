@@ -8,6 +8,10 @@ This is a [Plasmo extension](https://docs.plasmo.com/) project bootstrapped with
 
 1. Install dependencies: `pnpm i` or `pnp i`
 
+
+
+
+
 2. Run the development server:
 
 ```bash
@@ -22,7 +26,7 @@ For further guidance, [visit our Documentation](https://docs.plasmo.com/).
 
 ## Demo Video
 
-![demo_video](Demo_Vide.mp4)
+https://github.com/Rockstar100/Parveen_assignment/assets/98162589/52df2b21-30d0-46e6-a61d-275aaf863192
 
 
 ## Making production build
